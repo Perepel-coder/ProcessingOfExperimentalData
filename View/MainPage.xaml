@@ -5,17 +5,17 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    mc:Ignorable="d" Background="White" MinWidth="300" MinHeight="300" FontSize="14">
+    mc:Ignorable="d" Background="White" FontSize="14">
 
     <StackPanel Orientation="Horizontal">
-        <Button FontSize="40" Background="{Binding ElementName=menu, Path=Background}"
+        <Button FontSize="40"
                 FontFamily="Segoe MDL2 Assets" Command="{Binding HamburgerMenuIsActive}"
                 Content="&#xE700;" VerticalAlignment="Top"/>
-        <SplitView DisplayMode="Overlay" OpenPaneLength="200"
+        <SplitView DisplayMode="Overlay"
             IsPaneOpen="{Binding Path = PageControls.HamburgerMenuIsActive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <SplitView.Pane>
                 <!--#region Pane-->
-                <ListBox>
+                <ListBox  Background="LightGray">
                     <!--#region Resources-->
                     <ListBox.Resources>
                         <ResourceDictionary>
@@ -38,8 +38,20 @@
                     <ListBoxItem>
                         <Button Content="Статистический анализ" BorderThickness="0"
                                  Background="Transparent" FocusVisualPrimaryBrush="Transparent" FocusVisualSecondaryBrush="Transparent"
-                                Command="{Binding }" 
+                                Command="{Binding GetStatisticalAnalysis}" 
                                 CommandParameter="{Binding }" >
+                        </Button>
+                    </ListBoxItem>
+                    <ListBoxItem>
+                        <Button Content="Сохранить результаты как..." BorderThickness="0"
+                                 Background="Transparent" FocusVisualPrimaryBrush="Transparent" FocusVisualSecondaryBrush="Transparent"
+                                Command="{Binding }" >
+                        </Button>
+                    </ListBoxItem>
+                    <ListBoxItem>
+                        <Button Content="Сохранить входные данные как..." BorderThickness="0"
+                                 Background="Transparent" FocusVisualPrimaryBrush="Transparent" FocusVisualSecondaryBrush="Transparent"
+                                Command="{Binding }" >
                         </Button>
                     </ListBoxItem>
                 </ListBox>
@@ -56,14 +68,14 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <!--#region Эксперементальные данные-->
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Эксперементальные данные" TextAlignment="Center" FontSize="20" />
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Эксперементальные данные" TextAlignment="Center" />
                     <controls:DataGrid Grid.Row="1" Grid.Column="0" Name="myTable" AutoGenerateColumns="False" 
                                        ItemsSource="{Binding  PageControls.InitialDataForProcessing}"
                                        BorderThickness="1" BorderBrush="Gray" MaxWidth="600"/>
                     <!--#endregion-->
                     
                     <!--#region Результаты-->
-                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Статистический анализ - Результаты" TextAlignment="Center" FontSize="20" Margin="5,0,0,0" />
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Статистический анализ - Результаты" TextAlignment="Center" Margin="5,0,0,0" />
                     <controls:DataGrid Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" Margin="5,0,0,0"
                                        ItemsSource="{Binding }"
                                        BorderThickness="1" BorderBrush="Gray" MaxWidth="600"/>

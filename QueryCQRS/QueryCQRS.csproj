@@ -123,11 +123,14 @@
     <Compile Include="Autofac\QueriesModule.cs" />
     <Compile Include="Handlers\GetInputDataHANDLER.cs" />
     <Compile Include="Handlers\GetResultStatisticalAnalysisHANDLER.cs" />
+    <Compile Include="Handlers\GetStatisticalAnalysisHENDLER.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\GetInputDataREQUEST.cs" />
     <Compile Include="Queries\GetInputDataRESPONSE.cs" />
     <Compile Include="Queries\GetResultStatisticalAnalysisREQUEST.cs" />
     <Compile Include="Queries\GetResultStatisticalAnalysisRESPONSE.cs" />
+    <Compile Include="Queries\GetStatisticalAnalysisREQUEST.cs" />
+    <Compile Include="Queries\GetStatisticalAnalysisRESPONSE.cs" />
     <EmbeddedResource Include="Properties\QueryCQRS.rd.xml" />
   </ItemGroup>
   <ItemGroup>

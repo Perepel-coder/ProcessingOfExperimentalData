@@ -3,17 +3,12 @@ using QueryCQRS.Queries;
 using System;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using System.IO;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using ViewModels.Models;
 using Windows.Storage.Pickers;
 using Windows.UI.Xaml.Data;
 using System.Collections.Generic;
 using Windows.UI.Xaml;
-using System.Collections.ObjectModel;
 using System.Data;
 
 namespace ViewModels.ViewModels
@@ -30,6 +25,7 @@ namespace ViewModels.ViewModels
 
         private RelayCommand hamburgerMenuIsActive;
         private RelayCommand getInputDataFromFile;
+        private RelayCommand getStatisticalAnalysis;
 
         #region Commands
         public ICommand HamburgerMenuIsActive
@@ -57,15 +53,15 @@ namespace ViewModels.ViewModels
                       openPicker.FileTypeFilter.Add(".xlsx");
                       var file = await openPicker.PickSingleFileAsync();
                       if(file == null) { return; }
+                      PageControls.InitialDataForProcessing.Clear();
                       Stream stream = await file.OpenStreamForReadAsync();
                       var getInputDataRESPONSE = await this.mediatR.Send(new GetInputDataREQUEST(fileStream: stream));
                       stream.Close();
-
                       foreach (DataRow row in getInputDataRESPONSE.InputData.Rows)
                       {
                           PageControls.InitialDataForProcessing.Add(new MainPageControls.RowTable { Value = row.ItemArray });
                       }
-
+                      #region Creat DataGrid from DataTable
                       var columns = (ICollection<DataGridColumn>)obj; columns.Clear();
 
                       BindingMode mode = BindingMode.TwoWay;
@@ -85,7 +81,19 @@ namespace ViewModels.ViewModels
                               }
                           };
                           columns.Add(column);
-                      }  
+                      }
+                      #endregion
+                  }));
+            }
+        }
+        public ICommand GetStatisticalAnalysis
+        {
+            get
+            {
+                return getStatisticalAnalysis ??
+                  (getStatisticalAnalysis = new RelayCommand(obj =>
+                  {
+                      
                   }));
             }
         }

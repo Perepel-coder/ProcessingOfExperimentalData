@@ -9,17 +9,17 @@ namespace QueryCQRS.Handlers
     public class GetInputDataHANDLER : IRequestHandler<GetInputDataREQUEST, GetInputDataRESPONSE>
     {
         private readonly IInputData inputData;
-        public bool mode { get; set; }
+        public bool Mode { get; set; }
         public GetInputDataHANDLER(bool getDataFromFile, IInputData inputData) 
         { 
-            this.mode = getDataFromFile;
+            this.Mode = getDataFromFile;
             this.inputData = inputData;
         }
         public async Task<GetInputDataRESPONSE> Handle(GetInputDataREQUEST request, CancellationToken cancellationToken)
         {
-            if (mode == true) 
+            if (Mode == true) 
             {
-                var result = await Task.Run(() => inputData.GetInputDataFromFile(request.fileStream));
+                var result = await Task.Run(() => inputData.GetInputDataFromFile(request.FileStream));
                 return new GetInputDataRESPONSE(result);
             }
             else { return null; }

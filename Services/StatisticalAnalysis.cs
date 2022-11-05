@@ -98,7 +98,7 @@ namespace Services
         }
 
         /// <summary>
-        /// кодффициент ассиметрии
+        /// коэффициент ассиметрии
         /// </summary>
         /// <returns></returns>
         public double FindAsymmetryCoefficient()
