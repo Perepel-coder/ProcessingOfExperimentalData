@@ -140,9 +140,6 @@
     <PackageReference Include="ReactiveUI">
       <Version>18.3.1</Version>
     </PackageReference>
-    <PackageReference Include="System.Reflection.Emit">
-      <Version>4.7.0</Version>
-    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Mapper\" />

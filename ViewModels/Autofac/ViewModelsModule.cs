@@ -10,8 +10,7 @@ namespace ViewModels.Autofac
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterModule(new QueriesModule());
-            builder.Register(c => new MainViewModel(c.Resolve<IMediator>())).AsSelf();
-            //builder.Register(c => new MainViewModel(c.Resolve<IMapper>(), c.Resolve<IMediator>())).AsSelf();
+            builder.Register((c, p) => new MainViewModel(c.Resolve<IMediator>(), p.Named<IContainer>("container"))).AsSelf();
         }
     }
 }

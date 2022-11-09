@@ -5,9 +5,9 @@ namespace QueryCQRS.Queries
     public class GetInputDataRESPONSE
     {
         public DataTable InputData { get; private set; }
-        public GetInputDataRESPONSE(DataTable array)
+        public GetInputDataRESPONSE(DataTable table)
         {
-            this.InputData = array;
+            this.InputData = table;
         }
     }
 }

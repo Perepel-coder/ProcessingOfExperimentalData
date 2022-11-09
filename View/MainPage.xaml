@@ -4,18 +4,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    mc:Ignorable="d" Background="White" FontSize="14">
-
-    <StackPanel Orientation="Horizontal">
-        <Button FontSize="40"
+    xmlns:dgControl="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d" FontSize="14" d:DesignHeight="500" d:DesignWidth="800"
+    xmlns:local="using:ProcessingOfExperimentalData.View">
+    <Page.Resources>
+        <local:StringToIntConverter x:Key="StringToIntConverter"/>
+    </Page.Resources>
+    <StackPanel Orientation="Horizontal" Background="#aaf0d1">
+        <Button FontSize="10"
                 FontFamily="Segoe MDL2 Assets" Command="{Binding HamburgerMenuIsActive}"
-                Content="&#xE700;" VerticalAlignment="Top"/>
+                Content="&#59165;" VerticalAlignment="Stretch"/>
         <SplitView DisplayMode="Overlay"
             IsPaneOpen="{Binding Path = PageControls.HamburgerMenuIsActive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <SplitView.Pane>
                 <!--#region Pane-->
-                <ListBox  Background="LightGray">
+                <ListBox Background="#a0d6b4">
                     <!--#region Resources-->
                     <ListBox.Resources>
                         <ResourceDictionary>
@@ -30,57 +33,121 @@
                     <!--#endregion-->
                     <ListBoxItem>
                         <Button Content="Загрузить данные" BorderThickness="0"
-                                 Background="Transparent" FocusVisualPrimaryBrush="Transparent" FocusVisualSecondaryBrush="Transparent"
+                                Background="Transparent" FocusVisualPrimaryBrush="Transparent" FocusVisualSecondaryBrush="Transparent"
                                 Command="{Binding GetInputDataFromFile}" 
-                                CommandParameter="{Binding ElementName=myTable, Path=Columns}" >
+                                CommandParameter="{Binding ElementName=ExperimentalDataTable, Path=Columns}" >
                         </Button>
                     </ListBoxItem>
                     <ListBoxItem>
                         <Button Content="Статистический анализ" BorderThickness="0"
-                                 Background="Transparent" FocusVisualPrimaryBrush="Transparent" FocusVisualSecondaryBrush="Transparent"
+                                Background="Transparent" FocusVisualPrimaryBrush="Transparent" FocusVisualSecondaryBrush="Transparent"
                                 Command="{Binding GetStatisticalAnalysis}" 
-                                CommandParameter="{Binding }" >
+                                CommandParameter="{Binding ElementName=StatisticalAnalysisResultsTable, Path=Columns}" >
+                        </Button>
+                    </ListBoxItem>
+                    <ListBoxItem>
+                        <Button Content="Корреляции факторов" BorderThickness="0"
+                                Background="Transparent" FocusVisualPrimaryBrush="Transparent" FocusVisualSecondaryBrush="Transparent"
+                                Command="{Binding GetCorrelationsOfFactors}" 
+                                CommandParameter="{Binding ElementName=CorrelationsOfFactorsTable, Path=Columns}" >
                         </Button>
                     </ListBoxItem>
                     <ListBoxItem>
                         <Button Content="Сохранить результаты как..." BorderThickness="0"
-                                 Background="Transparent" FocusVisualPrimaryBrush="Transparent" FocusVisualSecondaryBrush="Transparent"
-                                Command="{Binding }" >
+                                Background="Transparent" FocusVisualPrimaryBrush="Transparent" FocusVisualSecondaryBrush="Transparent"
+                                Command="{Binding SaveResultAs}" >
                         </Button>
                     </ListBoxItem>
                     <ListBoxItem>
                         <Button Content="Сохранить входные данные как..." BorderThickness="0"
-                                 Background="Transparent" FocusVisualPrimaryBrush="Transparent" FocusVisualSecondaryBrush="Transparent"
-                                Command="{Binding }" >
+                                Background="Transparent" FocusVisualPrimaryBrush="Transparent" FocusVisualSecondaryBrush="Transparent"
+                                Command="{Binding SaveInputDataAs}" >
                         </Button>
                     </ListBoxItem>
                 </ListBox>
                 <!--#endregion-->   
             </SplitView.Pane>
             <SplitView.Content>
-                <Grid Margin="5,5,5,5" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
+                <Grid Margin="5,5,5,5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <!--#region Эксперементальные данные-->
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Эксперементальные данные" TextAlignment="Center" />
-                    <controls:DataGrid Grid.Row="1" Grid.Column="0" Name="myTable" AutoGenerateColumns="False" 
-                                       ItemsSource="{Binding  PageControls.InitialDataForProcessing}"
-                                       BorderThickness="1" BorderBrush="Gray" MaxWidth="600"/>
+                    <Grid  x:Name="ExperimentalData" Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="180"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0,0,0,5">
+                            <TextBlock Text="Экспериментальные данные - Настройки" TextAlignment="Center" Margin="0,0,0,5" />
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Margin="0,0,5,0" >
+                                    <TextBlock Margin="0, 5, 0, 0" Text="Число степеней свободы" VerticalAlignment="Center"/>
+                                    <TextBlock Margin="0, 20, 0, 0"  Text="Номер столбца для статистического анализа" VerticalAlignment="Center"/>
+                                    <TextBlock Margin="0, 20, 0, 0" Text="Номер столбца для первого фактора" VerticalAlignment="Center"/>
+                                    <TextBlock Margin="0, 20, 0, 0" Text="Номер столбца для второго фактора" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBox Text="{Binding Path=PageControls.NumberDegreesFreedom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+                                        Converter={StaticResource StringToIntConverter}}" 
+                                     Width="80" BorderThickness="0.5" Background="Transparent" Margin="0,0,0,5"/>
+                                    <TextBox Text="{Binding Path=PageControls.ColumForStatisticalAnalysis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+                                        Converter={StaticResource StringToIntConverter}}" 
+                                     Width="80" BorderThickness="0.5" Background="Transparent" Margin="0,0,0,5"/>
+                                    <TextBox Text="{Binding Path=PageControls.ColumForFactorsOne, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+                                        Converter={StaticResource StringToIntConverter}}" 
+                                     Width="80" BorderThickness="0.5" Background="Transparent" Margin="0,0,0,5"/>
+                                    <TextBox Text="{Binding Path=PageControls.ColumForFactorsTwo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
+                                        Converter={StaticResource StringToIntConverter}}" 
+                                     Width="80" BorderThickness="0.5" Background="Transparent" Margin="0,0,0,5"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <TextBlock Text="Экспериментальные данные - Выборка" TextAlignment="Center"/>
+                        </StackPanel>
+                        <ListView Grid.Row="1" BorderThickness="1" BorderBrush="Gray" SelectionMode="None">
+                            <dgControl:DataGrid Name="ExperimentalDataTable" AutoGenerateColumns="False" BorderBrush="Gray"
+                                                ItemsSource="{Binding PageControls.InitialDataForProcessing}"
+                                                BorderThickness="0.5" MinWidth="300" MaxWidth="600" Margin="0,15, 0,15"/>
+                        </ListView>
+                    </Grid>
+
                     <!--#endregion-->
                     
                     <!--#region Результаты-->
-                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Статистический анализ - Результаты" TextAlignment="Center" Margin="5,0,0,0" />
-                    <controls:DataGrid Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" Margin="5,0,0,0"
-                                       ItemsSource="{Binding }"
-                                       BorderThickness="1" BorderBrush="Gray" MaxWidth="600"/>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0,0,0,5">
+                            <TextBlock Text="Статистически анализ - отчет" TextAlignment="Center"/>
+                        </StackPanel>
+                        <ListView x:Name="StatisticalAnalysisResults" Grid.Row="1"
+                                  BorderThickness="1" BorderBrush="Gray" SelectionMode="None" Margin="5,0,0,0" >
+                            <ListBoxItem>
+                                <dgControl:DataGrid Name="StatisticalAnalysisResultsTable" AutoGenerateColumns="False" BorderBrush="Gray"
+                                                ItemsSource="{Binding PageControls.StatisticalAnalysisData}"
+                                                BorderThickness="0.5" MinWidth="300" MaxWidth="600"/>
+                            </ListBoxItem>
+                        </ListView>
+                        <StackPanel Grid.Row="2" Margin="0,0,0,5">
+                            <TextBlock Text="Корреляции факторов - отчет" TextAlignment="Center"/>
+                        </StackPanel>
+                        <ListView RelativePanel.Below="StatisticalAnalysisResults" Grid.Row="3"
+                                  BorderThickness="1" BorderBrush="Gray" SelectionMode="None" Margin="5,0,0,0" >
+                            <ListBoxItem>
+                                <dgControl:DataGrid Name="CorrelationsOfFactorsTable" AutoGenerateColumns="False" BorderBrush="Gray"
+                                                ItemsSource="{Binding PageControls.CorrelationsOfFactors}"
+                                                BorderThickness="0.5" MinWidth="300" MaxWidth="600"/>
+                            </ListBoxItem>
+                        </ListView>
+                    </Grid>
                     <!--#endregion-->
                 </Grid>
+                
             </SplitView.Content>
         </SplitView>
     </StackPanel>

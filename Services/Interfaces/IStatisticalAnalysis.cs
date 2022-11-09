@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Data;
 
 namespace Services.Interfaces
 {
     public interface IStatisticalAnalysis
     {
-        double FindModa();
-        double FindCentralMoment(int pow);
-        double FindMeanSquareDeviation();
-        double FindPearsonAsymmetryCoefficient();
-        double FindAsymmetryCoefficient();
-        double FindExcess();
-        double FindHarkeberStatistics();
-        double FindPearsonCriterionConsent();
+        DataTable StatisticalAnalysisREPORT(IEnumerable<double> samples, int degreesOfFreedom);
+        DataTable CorrelationREPOST(IEnumerable<double> firstFactor, IEnumerable<double> secondFactor);
     }
 }

@@ -41,10 +41,10 @@ namespace QueryCQRS.Autofac
             builder.Register(c => new GetInputDataHANDLER(true, c.Resolve<IInputData>()))
                 .As<IRequestHandler<GetInputDataREQUEST, GetInputDataRESPONSE>>();
 
-               //builder.Register(c => new GetTestResultQueryHandler(c.Resolve<IGenerateAutoTests>()))
-               //    .As<IRequestHandler<GetTestResultQueryRequest, GetTestResultQueryResponse>>();
+            builder.RegisterType<GetResultStatisticalAnalysisHANDLER>()
+                .As<IRequestHandler<GetResultStatisticalAnalysisREQUEST, GetResultStatisticalAnalysisRESPONSE>>();
 
-               builder.Register<ServiceFactory>(ctx =>
+            builder.Register<ServiceFactory>(ctx =>
             {
                 var c = ctx.Resolve<IComponentContext>();
                 return t => c.Resolve(t);

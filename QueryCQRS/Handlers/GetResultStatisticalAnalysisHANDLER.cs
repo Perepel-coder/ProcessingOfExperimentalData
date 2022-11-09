@@ -9,7 +9,8 @@ namespace QueryCQRS.Handlers
     {
         public async Task<GetResultStatisticalAnalysisRESPONSE> Handle(GetResultStatisticalAnalysisREQUEST request, CancellationToken cancellationToken)
         {
-            return await Task.Run(()=> request.GenerateReport());
+            if (request.mode) { return await Task.Run(() => new GetResultStatisticalAnalysisRESPONSE(request.analysis, request.samples, request.degreesOfFreedom)); }
+            return await Task.Run(() => new GetResultStatisticalAnalysisRESPONSE(request.analysis, request.firstFactor, request.secondFactor));
         }
     }
 }
